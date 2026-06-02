@@ -3,7 +3,7 @@
   if(reduce)document.body.classList.add('reduce');
   var slides=[].slice.call(document.querySelectorAll('.slide'));
   var total=slides.length, cur=0;
-  var bar=document.getElementById('bar'),counter=document.getElementById('counter');
+  var bar=document.getElementById('bar'),counter=document.getElementById('counter'),crumb=document.getElementById('crumb');
   var meta=[['EDO','Punto de partida','¿Qué son las ecuaciones diferenciales?'],
     ['Redes','El protagonista','¿Qué son las redes neuronales?'],
     ['Gradiente','La brújula','¿Qué es el vector gradiente?'],
@@ -29,6 +29,8 @@
     slides.forEach(function(s){s.classList.remove('active')});
     void t.offsetWidth;t.classList.add('active');cur=n;
     bar.style.width=((n+1)/total*100)+'%';counter.textContent=pad(n)+' / '+pad(total-1);
+    if(crumb)crumb.innerHTML='0'+(n+1)+' · <b>'+meta[n][0]+'</b>';
+    t.scrollTop=0;
     dots.forEach(function(d,k){d.classList.toggle('on',k===n)});
     sideBtns.forEach(function(b,k){b.classList.toggle('on',k===n);b.setAttribute('aria-current',k===n?'true':'false')});
     slides.forEach(function(s,k){s.setAttribute('aria-hidden',k===n?'false':'true')});
@@ -67,8 +69,13 @@
     else if(e.key==='Escape')closeOverlays();
     else if(/^[1-6]$/.test(e.key))go(+e.key-1);
   });
-  var sx=0;document.addEventListener('touchstart',function(e){sx=e.changedTouches[0].clientX},{passive:true});
-  document.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>55)dx<0?go(cur+1):go(cur-1)},{passive:true});
+  var sx=0,sy=0,stEl=null;
+  document.addEventListener('touchstart',function(e){var t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;stEl=e.target},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(stEl&&stEl.closest&&stEl.closest('input,button,.seg,.overlay'))return;
+    var t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+    if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.3){dx<0?go(cur+1):go(cur-1)}
+  },{passive:true});
 
   /* ---------- shared canvas helpers ---------- */
   var DPR=Math.min(2,window.devicePixelRatio||1);
@@ -223,7 +230,7 @@
       fx.globalAlpha=a;fx.fillStyle=p[t.ck];fx.font=t.size+"px 'JetBrains Mono',monospace";
       fx.fillText(t.text,t.x,t.y);}
     fx.globalAlpha=1;}
-  function ini(){parts=[];for(var i=0;i<80;i++)parts.push(sp());iniTokens();}
+  function ini(){parts=[];var np=innerWidth<760?42:80;for(var i=0;i<np;i++)parts.push(sp());iniTokens();}
   rs();ini();window.addEventListener('resize',function(){rs();ini();fitAll()});
   function fitAll(){activate(cur)}
   function fdraw(){fx.clearRect(0,0,FW,FH);var bx=FW*0.74,by=FH*0.5;var p=pal();

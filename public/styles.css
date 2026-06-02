@@ -122,10 +122,14 @@
 
   /* chrome */
   .topbar{position:fixed;top:0;left:0;right:0;z-index:7;display:flex;justify-content:space-between;
-    align-items:center;padding:1.1rem clamp(1.4rem,4vw,2.4rem)}
-  .brand{font-family:'Fraunces',serif;font-size:1rem;color:var(--paper)}
+    align-items:center;gap:.8rem;padding:1.1rem clamp(1.4rem,4vw,2.4rem)}
+  .brand{font-family:'Fraunces',serif;font-size:1rem;color:var(--paper);min-width:0;flex:1;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .brand b{color:var(--amber);font-weight:500}
-  .tbtools{display:flex;gap:.4rem}
+  .crumb{display:none;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    font-family:'JetBrains Mono',monospace;font-size:.8rem;letter-spacing:.08em;color:var(--paper)}
+  .crumb b{color:var(--amber);font-weight:500}
+  .tbtools{display:flex;gap:.4rem;flex-shrink:0}
   .icon{width:36px;height:36px;border-radius:9px;border:1px solid var(--line2);background:var(--surface);
     color:var(--paper);cursor:pointer;font-size:.92rem;display:flex;align-items:center;justify-content:center;
     transition:all .18s;font-family:'JetBrains Mono',monospace}
@@ -183,3 +187,52 @@ input[type=range]:focus-visible{outline:2px solid var(--amber);outline-offset:2p
 .icon{user-select:none}
 @media print{#field,.vignette,.controls,.sidenav,.topbar{display:none!important}
   .slide{position:relative;opacity:1!important;visibility:visible!important;page-break-after:always;height:100vh}}
+
+/* responsive · mobile ---------------------------------------------------- */
+@media (max-width:760px){
+  .topbar{padding:.65rem .9rem;gap:.6rem}
+  .brand{display:none}
+  .crumb{display:block}
+  .icon{width:34px;height:34px;font-size:.88rem;border-radius:8px}
+  .tbtools{gap:.35rem}
+  .sidenav{display:none}
+  .ghostnum{font-size:20vh;right:.1rem;opacity:.5}
+  .stage{top:0}
+  .slide{justify-content:flex-start;overflow-y:auto;overflow-x:hidden;
+    padding:3.9rem 1.05rem 5.2rem;-webkit-overflow-scrolling:touch}
+  .col,.demo{min-width:0;flex:1 1 100%}
+  .row{gap:1rem;margin-top:.9rem}
+  h1{font-size:clamp(1.55rem,7.4vw,2.2rem);max-width:100%}
+  .lead{font-size:1rem;max-width:100%}
+  .sub,.note{max-width:100%}
+  .eqcard{font-size:.9rem;padding:.6rem .8rem;margin-top:.9rem}
+  .eqcard.hero{font-size:1.05rem;padding:.7rem .9rem}
+  .eqcard .op[style]{font-size:.62em !important}
+  .nbox{height:200px}.gbox{height:215px}.sbox{height:235px}
+  .ctrlrow{gap:.5rem} .ctrlrow label{min-width:38px}
+  .btn{padding:.55rem .75rem;font-size:.78rem}
+  .readouts{gap:.45rem} .ro{min-width:0;flex:1}
+  .linkrow{gap:.4rem} .tag{font-size:.62rem;padding:.35rem .6rem}
+  .legend{font-size:.7rem;gap:.8rem}
+  .controls{bottom:.6rem;gap:.6rem;padding:.4rem .7rem;border-radius:14px;
+    background:color-mix(in srgb,var(--ink) 78%,transparent);backdrop-filter:blur(8px);
+    border:1px solid var(--line)}
+  .nv{width:40px;height:40px}
+  .dots button{width:9px;height:9px}.dots button.on{width:22px}
+  .overlay{padding:4.4rem 1rem 2rem}
+  .ovgrid{grid-template-columns:1fr;gap:.7rem}
+  .ovcard{padding:1rem}
+  .help dt{min-width:96px}
+}
+@media (max-width:400px){
+  .ghostnum{display:none}
+  .counter{display:none}
+  h1{font-size:6.6vw}
+  .crumb{font-size:.74rem}
+  .readouts{flex-wrap:wrap}
+}
+/* landscape phones: keep it tight so controls stay reachable */
+@media (max-height:480px) and (orientation:landscape){
+  .slide{justify-content:flex-start;overflow-y:auto;padding:3.2rem 2rem 4rem}
+  .ghostnum{font-size:42vh}
+}
