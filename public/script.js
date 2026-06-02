@@ -4,7 +4,8 @@
   var slides=[].slice.call(document.querySelectorAll('.slide'));
   var total=slides.length, cur=0;
   var bar=document.getElementById('bar'),counter=document.getElementById('counter'),crumb=document.getElementById('crumb');
-  var meta=[['EDO','Punto de partida','¿Qué son las ecuaciones diferenciales?'],
+  var meta=[['Portada','Presentación','Ecuaciones diferenciales · Grupo E194'],
+    ['EDO','Punto de partida','¿Qué son las ecuaciones diferenciales?'],
     ['Redes','El protagonista','¿Qué son las redes neuronales?'],
     ['Gradiente','La brújula','¿Qué es el vector gradiente?'],
     ['Conexión','Se conectan','Cuando los tres se encuentran'],
@@ -36,7 +37,7 @@
     slides.forEach(function(s,k){s.setAttribute('aria-hidden',k===n?'false':'true')});
     setTimeout(function(){activate(n)},reduce?0:120);
   }
-  function activate(n){ if(n===0)drawDirField(); else if(n===1)drawNeuron(); else if(n===2)drawGrad(); else if(n===5)drawSim(); }
+  function activate(n){ if(n===0)drawCover(); else if(n===1)drawDirField(); else if(n===2)drawNeuron(); else if(n===3)drawGrad(); else if(n===6)drawSim(); }
   function redrawCurrent(){activate(cur)}
 
   document.getElementById('next').onclick=function(){go(cur+1)};
@@ -85,6 +86,32 @@
     return {amber:s.getPropertyValue('--amber').trim(),cyan:s.getPropertyValue('--cyan').trim(),
       paper:s.getPropertyValue('--paper').trim(),muted:s.getPropertyValue('--muted').trim(),
       grid:s.getPropertyValue('--grid').trim(),axis:s.getPropertyValue('--axis').trim(),violet:s.getPropertyValue('--violet').trim()}}
+
+  /* ---------- slide 0: animated phase-portrait cover ---------- */
+  var coverCtx,coverW,coverH,coverScale,coverCx,coverCy,coverParts=[],coverRAF=0;
+  function coverFit(){var cv=document.getElementById('cCover');if(!cv)return false;
+    var o=fit(cv);coverCtx=o.c;coverW=o.W;coverH=o.H;coverScale=Math.min(coverW,coverH)/7;
+    coverCx=coverW*0.5;coverCy=coverH*0.5;return true}
+  function coverSpawn(){var a=Math.random()*6.283,r=2.4+Math.random()*0.8;
+    return {x:Math.cos(a)*r,y:Math.sin(a)*r,trail:[],ck:Math.random()<0.5?'amber':'cyan'}}
+  function coverInit(){coverParts=[];for(var i=0;i<14;i++)coverParts.push(coverSpawn())}
+  function coverAdvance(q){var dt=0.05,dx=(-0.3*q.x-q.y)*dt,dy=(q.x-0.3*q.y)*dt;q.x+=dx;q.y+=dy;
+    q.trail.push([coverCx+q.x*coverScale,coverCy-q.y*coverScale]);if(q.trail.length>38)q.trail.shift();
+    if(q.x*q.x+q.y*q.y<0.02){var s=coverSpawn();q.x=s.x;q.y=s.y;q.trail=[];q.ck=s.ck}}
+  function coverRender(){var c=coverCtx,p=pal();c.clearRect(0,0,coverW,coverH);
+    c.strokeStyle=p.grid;c.lineWidth=1;c.beginPath();c.moveTo(0,coverCy);c.lineTo(coverW,coverCy);
+    c.moveTo(coverCx,0);c.lineTo(coverCx,coverH);c.stroke();
+    for(var k=0;k<coverParts.length;k++){var q=coverParts[k],col=p[q.ck];c.lineWidth=1.8;
+      for(var i=1;i<q.trail.length;i++){c.strokeStyle=col;c.globalAlpha=(i/q.trail.length)*0.85;
+        c.beginPath();c.moveTo(q.trail[i-1][0],q.trail[i-1][1]);c.lineTo(q.trail[i][0],q.trail[i][1]);c.stroke()}
+      var h=q.trail[q.trail.length-1];if(h){c.globalAlpha=1;c.fillStyle=col;c.beginPath();c.arc(h[0],h[1],2.6,0,7);c.fill()}}
+    c.globalAlpha=.5;c.fillStyle=p.paper;c.beginPath();c.arc(coverCx,coverCy,3,0,7);c.fill();c.globalAlpha=1}
+  function coverFrame(){if(cur!==0){coverRAF=0;return}
+    if(!document.hidden&&!overlayOpen()){for(var k=0;k<coverParts.length;k++)coverAdvance(coverParts[k]);coverRender()}
+    coverRAF=requestAnimationFrame(coverFrame)}
+  function drawCover(){if(!coverFit())return;if(!coverParts.length)coverInit();
+    if(reduce){coverInit();for(var s=0;s<70;s++)for(var k=0;k<coverParts.length;k++)coverAdvance(coverParts[k]);coverRender();return}
+    if(!coverRAF)coverFrame()}
 
   /* ---------- slide 1: direction field dy/dt=-y ---------- */
   function drawDirField(){

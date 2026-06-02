@@ -37,9 +37,34 @@
 
 <div class="stage" id="stage">
 
+  <!-- 00 PORTADA -->
+  <section class="slide cover" data-i="0">
+    <div class="row" style="align-items:center">
+      <div class="col">
+        <div class="kicker reveal r1">Presentación · Grupo E194</div>
+        <h1 class="cover-title reveal r2">Ecuaciones<br>diferenciales</h1>
+        <div class="cover-rule reveal r3"></div>
+        <div class="members reveal r4">
+          <div class="member"><span class="dotm2"></span><div><div class="mlabel">Integrante</div><div class="mname">Carlos Ramirez</div></div></div>
+          <div class="member"><span class="dotm2"></span><div><div class="mlabel">Integrante</div><div class="mname">Juan Zarate</div></div></div>
+        </div>
+        <div class="cover-meta reveal r5">
+          <span class="gbadge">Grupo E194</span>
+          <span class="ctag">clase interactiva &middot; desliza o pulsa &rarr;</span>
+        </div>
+      </div>
+      <div class="col reveal r3">
+        <div class="hero">
+          <canvas id="cCover" class="plot hbox" role="img" aria-label="Retrato de fase animado: trayectorias en espiral hacia un punto de equilibrio, que ilustran soluciones de un sistema de ecuaciones diferenciales."></canvas>
+          <div class="hero-cap">retrato de fase &middot; dx/dt = &minus;0.3x &minus; y &middot; dy/dt = x &minus; 0.3y</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 01 EDO -->
-  <section class="slide" data-i="0">
-    <div class="ghostnum">01</div>
+  <section class="slide" data-i="1">
+    <div class="ghostnum">02</div>
     <div class="kicker reveal r1">Punto de partida</div>
     <h1 class="reveal r2">¿Qué son las <em>ecuaciones<br>diferenciales</em>?</h1>
     <p class="lead reveal r3">Ecuaciones que describen <b>cómo cambia algo</b> a lo largo del tiempo. En lugar de un valor fijo, relacionan una cantidad con su <span class="mut">razón de cambio</span> —su derivada.</p>
@@ -68,8 +93,8 @@
   </section>
 
   <!-- 02 Redes -->
-  <section class="slide" data-i="1">
-    <div class="ghostnum">02</div>
+  <section class="slide" data-i="2">
+    <div class="ghostnum">03</div>
     <div class="kicker reveal r1">El protagonista</div>
     <h1 class="reveal r2">¿Qué son las <em>redes<br>neuronales</em> artificiales?</h1>
     <div class="row">
@@ -97,8 +122,8 @@
   </section>
 
   <!-- 03 Gradiente -->
-  <section class="slide" data-i="2">
-    <div class="ghostnum">03</div>
+  <section class="slide" data-i="3">
+    <div class="ghostnum">04</div>
     <div class="kicker reveal r1">La brújula</div>
     <h1 class="reveal r2">¿Qué es el <span class="cy">vector<br>gradiente</span>?</h1>
     <div class="row">
@@ -125,8 +150,8 @@
   </section>
 
   <!-- 04 Conexión 1 -->
-  <section class="slide" data-i="3">
-    <div class="ghostnum">04</div>
+  <section class="slide" data-i="4">
+    <div class="ghostnum">05</div>
     <div class="kicker reveal r1">Se conectan</div>
     <h1 class="reveal r2">Cuando los tres <em>se encuentran</em></h1>
     <p class="lead reveal r3">La red mide su error con <span class="vg">L</span>(<span class="vt">θ</span>). Ese error depende de los <span class="vt">pesos</span>; para reducirlo nos movemos en contra del <span class="vg">gradiente</span>. Así nace la regla de aprendizaje.</p>
@@ -142,8 +167,8 @@
   </section>
 
   <!-- 05 Conexión 2 -->
-  <section class="slide" data-i="4">
-    <div class="ghostnum">05</div>
+  <section class="slide" data-i="5">
+    <div class="ghostnum">06</div>
     <div class="kicker reveal r1">El cierre</div>
     <h1 class="reveal r2">El aprendizaje <em>es</em> una<br>ecuación diferencial</h1>
     <p class="lead reveal r3">Reescribimos la regla como un cociente de cambios. Si el paso <span class="ve">η</span> → 0, ese cociente se vuelve una <b>derivada</b>:</p>
@@ -162,8 +187,8 @@
   </section>
 
   <!-- 06 Práctica -->
-  <section class="slide" data-i="5">
-    <div class="ghostnum">06</div>
+  <section class="slide" data-i="6">
+    <div class="ghostnum">07</div>
     <div class="kicker reveal r1">En acción · estabilidad</div>
     <h1 class="reveal r2" style="font-size:clamp(1.7rem,4vw,3rem)">Una EDO que <em>aprende sola</em></h1>
     <div class="row" style="margin-top:1rem;align-items:flex-start">

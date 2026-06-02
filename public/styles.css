@@ -236,3 +236,43 @@ input[type=range]:focus-visible{outline:2px solid var(--amber);outline-offset:2p
   .slide{justify-content:flex-start;overflow-y:auto;padding:3.2rem 2rem 4rem}
   .ghostnum{font-size:42vh}
 }
+
+/* cover / portada -------------------------------------------------------- */
+.cover .row{align-items:center}
+.cover-title{font-family:'Fraunces',serif;font-weight:600;line-height:.96;letter-spacing:-.02em;
+  font-size:clamp(2.6rem,8vw,6rem);color:var(--paper);margin:0}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .cover-title{background:linear-gradient(100deg,var(--paper) 0%,var(--amber) 42%,var(--cyan) 66%,var(--paper) 100%);
+    background-size:230% 100%;-webkit-background-clip:text;background-clip:text;
+    color:transparent;-webkit-text-fill-color:transparent;animation:shimmer 9s linear infinite}
+}
+@keyframes shimmer{to{background-position:-230% 0}}
+.cover-rule{height:2px;width:0;max-width:340px;border-radius:2px;
+  background:linear-gradient(90deg,var(--amber),transparent);margin:1.5rem 0 1.6rem;
+  animation:grow 1.1s .55s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes grow{to{width:62%}}
+.members{display:flex;gap:2.2rem;flex-wrap:wrap}
+.member{display:flex;align-items:center;gap:.75rem}
+.dotm2{width:11px;height:11px;border-radius:50%;background:var(--amber);flex-shrink:0;
+  box-shadow:0 0 0 5px rgba(255,180,84,.14);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 9px rgba(255,180,84,.05)}}
+.mlabel{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted)}
+.mname{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--paper);line-height:1.1}
+.cover-meta{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-top:1.9rem}
+.gbadge{font-family:'JetBrains Mono',monospace;font-size:.82rem;letter-spacing:.1em;
+  padding:.55rem 1.1rem;border-radius:999px;border:1px solid rgba(255,180,84,.5);
+  color:var(--amber);background:rgba(255,180,84,.09)}
+.ctag{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--muted)}
+.hero{position:relative}
+.hbox{height:350px}
+.hero-cap{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);
+  margin-top:.6rem;text-align:center;letter-spacing:.02em}
+@media (max-width:760px){
+  .cover .row{align-items:flex-start}
+  .cover-title{font-size:clamp(2.2rem,12vw,3.2rem)}
+  .members{gap:1.3rem}
+  .mname{font-size:1.15rem}
+  .hbox{height:230px}
+  .cover-meta{margin-top:1.4rem}
+}
