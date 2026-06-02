@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El aprendizaje como ecuación diferencial · clase interactiva</title>
+  <meta name="description" content="Clase interactiva: el aprendizaje de una red neuronal como una ecuación diferencial. Descenso de gradiente, vector gradiente y método de Euler explicados con simuladores en vivo.">
+  <meta name="author" content="">
+  <meta name="theme-color" content="#0a0e16">
+  <meta property="og:title" content="El aprendizaje como ecuación diferencial">
+  <meta property="og:description" content="Clase interactiva sobre redes neuronales, gradiente y ecuaciones diferenciales.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0e16'/%3E%3Ctext x='32' y='44' font-size='38' text-anchor='middle' fill='%23ffb454' font-family='Georgia,serif'%3E%E2%88%82%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<canvas id="field"></canvas>
+<div class="vignette"></div>
+<div class="progress" id="bar"></div>
+
+<div class="topbar">
+  <div class="brand">El aprendizaje como <b>ecuación diferencial</b></div>
+  <div class="tbtools">
+    <button class="icon" id="themeBtn" title="Tema claro/oscuro (T)">◐</button>
+    <button class="icon" id="ovBtn" title="Vista resumen (O)">▦</button>
+    <button class="icon" id="helpBtn" title="Atajos (?)">?</button>
+    <button class="icon" id="fsBtn" title="Pantalla completa (F)">⛶</button>
+  </div>
+</div>
+
+<nav class="sidenav" id="sidenav"></nav>
+
+<div class="stage" id="stage">
+
+  <!-- 01 EDO -->
+  <section class="slide" data-i="0">
+    <div class="ghostnum">01</div>
+    <div class="kicker reveal r1">Punto de partida</div>
+    <h1 class="reveal r2">¿Qué son las <em>ecuaciones<br>diferenciales</em>?</h1>
+    <p class="lead reveal r3">Ecuaciones que describen <b>cómo cambia algo</b> a lo largo del tiempo. En lugar de un valor fijo, relacionan una cantidad con su <span class="mut">razón de cambio</span> —su derivada.</p>
+    <div class="row" style="margin-top:1rem">
+      <div class="col">
+        <div class="eqcard reveal r4">
+          <span class="frac"><span class="num"><span class="op">d</span>y</span><span class="den"><span class="op">d</span>t</span></span>
+          <span class="op">=</span><span>f<span class="op">(</span>y, t<span class="op">)</span></span>
+          <span class="op" style="margin-left:.6em;font-size:.7em">orden 1 · condición inicial y(0)=y₀</span>
+        </div>
+        <div class="chips reveal r5">
+          <span class="chip">enfriamiento de un café</span>
+          <span class="chip">crecimiento de población</span>
+          <span class="chip">descarga de una batería</span>
+        </div>
+        <div class="note reveal r6">Resolverla = hallar la función y(t) que cumple esa relación de cambio. Hoy veremos que <b>entrenar una red neuronal es exactamente eso.</b></div>
+      </div>
+      <div class="col reveal r5">
+        <div class="demo">
+          <h4><i></i>Campo de direcciones · dy/dt = −y</h4>
+          <canvas id="cField" class="plot gbox" role="img" aria-label="Campo de direcciones de la ecuación diferencial dy/dt igual a menos y, con una trayectoria que decae hacia cero."></canvas>
+          <div class="note" style="margin-top:.7rem;border-color:var(--amber)">Las flechas indican hacia dónde "fluye" la solución; la curva sigue ese flujo hasta el equilibrio. Es la misma idea que usaremos para el aprendizaje.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Redes -->
+  <section class="slide" data-i="1">
+    <div class="ghostnum">02</div>
+    <div class="kicker reveal r1">El protagonista</div>
+    <h1 class="reveal r2">¿Qué son las <em>redes<br>neuronales</em> artificiales?</h1>
+    <div class="row">
+      <div class="col">
+        <p class="lead reveal r3">Modelos inspirados en el cerebro que <b>aprenden patrones</b> de los datos: predicen, clasifican, reconocen imágenes y generan texto.</p>
+        <p class="sub reveal r4">Cada conexión guarda un número, el <span class="vt">peso</span>. La neurona combina entradas como <span class="vt">y</span>=<span class="op">w</span>·<span class="vg">x</span>+b y aplica una activación. <b>Aprender = ajustar los pesos</b> en un ciclo: predice → compara → corrige.</p>
+        <div class="chips reveal r5">
+          <span class="chip cy">predice</span><span class="chip">compara con el real</span><span class="chip am">corrige el error</span>
+        </div>
+        <div class="note reveal r6">Mueve el peso a mano… o pulsa <b>entrenar</b> y deja que el descenso de gradiente encuentre la mejor recta solo.</div>
+      </div>
+      <div class="col reveal r4">
+        <div class="demo">
+          <h4><i></i>Una neurona aprendiendo · y = w·x</h4>
+          <canvas id="cNeuron" class="plot nbox" role="img" aria-label="Puntos de datos con una recta de predicción ajustable y los errores marcados verticalmente."></canvas>
+          <div class="ctrlrow"><label>peso w</label><input type="range" id="wRange" min="0" max="3" step="0.01" value="0.5"><span class="val" id="wVal">0.50</span></div>
+          <div class="ctrlrow"><button class="btn pri" id="trainBtn">▶ entrenar (descenso de gradiente)</button><button class="btn" id="nResetBtn">reiniciar</button></div>
+          <div class="readouts">
+            <div class="ro"><div class="k">error (MSE)</div><div class="v am" id="mseVal">—</div></div>
+            <div class="ro"><div class="k">w óptimo ≈</div><div class="v cy">1.50</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Gradiente -->
+  <section class="slide" data-i="2">
+    <div class="ghostnum">03</div>
+    <div class="kicker reveal r1">La brújula</div>
+    <h1 class="reveal r2">¿Qué es el <span class="cy">vector<br>gradiente</span>?</h1>
+    <div class="row">
+      <div class="col">
+        <p class="lead reveal r3">Indica <b>hacia dónde una función crece más rápido</b>. Reúne las derivadas parciales respecto a cada variable.</p>
+        <div class="eqcard reveal r4"><span class="op">∇</span><span class="vg">L</span><span class="op">=</span><span class="op">(</span><span class="frac"><span class="num"><span class="op">∂</span>L</span><span class="den"><span class="op">∂</span>θ₁</span></span><span>,</span><span class="frac"><span class="num"><span class="op">∂</span>L</span><span class="den"><span class="op">∂</span>θ₂</span></span><span>,…)</span></div>
+        <div class="note reveal r5"><b>Analogía de la montaña:</b> el gradiente apunta a la subida más empinada. Para <span class="vt">bajar el error</span> vamos en dirección <b>contraria</b>: −∇L.</div>
+        <div class="chips reveal r6"><span class="chip cy">|∇L| grande → cambia mucho</span><span class="chip am">∇L ≈ 0 → mínimo</span></div>
+      </div>
+      <div class="col reveal r4">
+        <div class="demo">
+          <h4><i></i>Gradiente sobre la curva de error</h4>
+          <canvas id="cGrad" class="plot gbox" role="img" aria-label="Parábola de la función de error con un punto móvil, su recta tangente y una flecha que muestra la dirección de descenso."></canvas>
+          <div class="ctrlrow"><label>θ</label><input type="range" id="thRange" min="-3" max="3" step="0.02" value="2.2"><span class="val" id="thVal">2.20</span></div>
+          <div class="ctrlrow"><button class="btn pri" id="rollBtn">▶ rodar hacia el mínimo</button></div>
+          <div class="readouts">
+            <div class="ro"><div class="k">L = θ²</div><div class="v" id="gLVal">—</div></div>
+            <div class="ro"><div class="k">∇L = 2θ</div><div class="v am" id="gGVal">—</div></div>
+            <div class="ro"><div class="k">paso −∇L</div><div class="v cy" id="gDVal">—</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Conexión 1 -->
+  <section class="slide" data-i="3">
+    <div class="ghostnum">04</div>
+    <div class="kicker reveal r1">Se conectan</div>
+    <h1 class="reveal r2">Cuando los tres <em>se encuentran</em></h1>
+    <p class="lead reveal r3">La red mide su error con <span class="vg">L</span>(<span class="vt">θ</span>). Ese error depende de los <span class="vt">pesos</span>; para reducirlo nos movemos en contra del <span class="vg">gradiente</span>. Así nace la regla de aprendizaje.</p>
+    <div class="eqcard reveal r4"><span class="vg">L</span><span class="op">(</span><span class="vt">θ</span><span class="op">)</span><span class="op">=</span><span class="op">1/n&nbsp;Σ</span><span class="op">(</span>y<sub>real</sub><span class="op">−</span>y<sub>pred</sub><span class="op">)</span><sup>2</sup><span class="op" style="margin-left:.6em;font-size:.62em">error cuadrático medio</span></div>
+    <div class="reveal r5"><div class="eqcard hero"><span class="vt">θ</span><sub>nuevo</sub><span class="op">=</span><span class="vt">θ</span><sub>viejo</sub><span class="op">−</span><span class="ve">η</span><span class="op">·∇</span><span class="vg">L</span><span class="op">(</span><span class="vt">θ</span><span class="op">)</span></div></div>
+    <div class="linkrow reveal r6">
+      <span class="tag t2">peso θ · red</span><span class="arrowdash">+</span>
+      <span class="tag t1">∇L · gradiente</span><span class="arrowdash">+</span>
+      <span class="tag t3">η · tasa de aprendizaje</span><span class="arrowdash">=</span>
+      <span class="tag" style="border-color:var(--amber);color:var(--amber)">descenso de gradiente</span>
+    </div>
+    <div class="note reveal r6">η controla el tamaño del paso: pequeño = aprende lento pero seguro; grande = rápido pero arriesgado. Justo lo que veremos al final.</div>
+  </section>
+
+  <!-- 05 Conexión 2 -->
+  <section class="slide" data-i="4">
+    <div class="ghostnum">05</div>
+    <div class="kicker reveal r1">El cierre</div>
+    <h1 class="reveal r2">El aprendizaje <em>es</em> una<br>ecuación diferencial</h1>
+    <p class="lead reveal r3">Reescribimos la regla como un cociente de cambios. Si el paso <span class="ve">η</span> → 0, ese cociente se vuelve una <b>derivada</b>:</p>
+    <div class="eqcard reveal r4"><span class="frac"><span class="num"><span class="vt">θ</span><sub>nuevo</sub><span class="op">−</span><span class="vt">θ</span><sub>viejo</sub></span><span class="den"><span class="ve">η</span></span></span><span class="op">=−∇</span><span class="vg">L</span><span class="op">(</span><span class="vt">θ</span><span class="op">)</span><span class="arrowdash" style="margin:0 .35em">⟶</span></div>
+    <div class="reveal r5"><div class="eqcard hero"><span class="frac vt"><span class="num"><span class="op">d</span>θ</span><span class="den"><span class="op">d</span>t</span></span><span class="op">=−∇</span><span class="vg">L</span><span class="op">(</span><span class="vt">θ</span><span class="op">)</span><span class="op" style="margin-left:.5em;font-size:.5em">flujo de gradiente</span></div></div>
+    <div class="row" style="margin-top:.3rem">
+      <div class="col"><div class="note reveal r6">El descenso de gradiente es el <b>método de Euler</b> aplicado a esta EDO, con <span class="ve">η</span> como paso de integración. Los pesos evolucionan en el tiempo siguiendo el gradiente del error.</div></div>
+      <div class="col reveal r6">
+        <div class="chips">
+          <span class="chip cy">Neural ODE · la red define dθ/dt</span>
+          <span class="chip am">PINNs · redes que resuelven EDOs</span>
+          <span class="chip">Gradient Flow · aprendizaje continuo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Práctica -->
+  <section class="slide" data-i="5">
+    <div class="ghostnum">06</div>
+    <div class="kicker reveal r1">En acción · estabilidad</div>
+    <h1 class="reveal r2" style="font-size:clamp(1.7rem,4vw,3rem)">Una EDO que <em>aprende sola</em></h1>
+    <div class="row" style="margin-top:1rem;align-items:flex-start">
+      <div class="col reveal r3" style="flex:1 1 280px">
+        <div class="eqcard" style="margin-top:0"><span class="vg">L</span>=<span class="vt">θ</span><sup>2</sup><span class="arrowdash" style="margin:0 .3em">→</span><span class="frac vt"><span class="num"><span class="op">d</span>θ</span><span class="den"><span class="op">d</span>t</span></span><span class="op">=−2</span><span class="vt">θ</span></div>
+        <div class="eqcard hero" style="margin-top:.8rem"><span class="vt">θ</span><span class="op">(</span>t<span class="op">)</span>=<span class="vt">θ</span>₀&thinsp;e<sup>−2t</sup></div>
+        <div class="note" style="margin-top:1rem">Mueve <span class="ve">η</span> y observa: pequeño → los puntos siguen la curva exacta. Cerca de 0.5 → salto óptimo. Más de 1 → <b>el método de Euler se vuelve inestable y diverge.</b></div>
+      </div>
+      <div class="col reveal r4" style="flex:1 1 420px">
+        <div class="demo">
+          <h4><i></i>Descenso de gradiente vs. solución exacta (Euler)</h4>
+          <div class="legend"><span><span class="sw"></span>exacta θ(t)</span><span><span class="sw dash"></span><span class="dotm"></span>descenso (η)</span></div>
+          <canvas id="cSim" class="plot sbox" role="img" aria-label="Comparación entre la solución exacta de la ecuación diferencial y los pasos discretos del descenso de gradiente, según el valor de la tasa de aprendizaje."></canvas>
+          <div class="ctrlrow"><label>función</label>
+            <div class="seg" id="lossSeg"><button data-l="0" class="on">L=θ²</button><button data-l="1">L=(θ−5)²</button></div>
+          </div>
+          <div class="ctrlrow"><label>η</label><input type="range" id="etaRange" min="0.05" max="1.2" step="0.01" value="0.3"><span class="val" id="etaVal">0.30</span></div>
+          <div class="ctrlrow"><label>θ₀</label><input type="range" id="t0Range" min="-4" max="9" step="0.1" value="2"><span class="val" id="t0Val">2.0</span></div>
+          <div class="ctrlrow"><button class="btn pri" id="playBtn">▶ animar</button><button class="btn" id="stepBtn">paso ›</button><button class="btn" id="simReset">reiniciar</button></div>
+          <div class="readouts">
+            <div class="ro"><div class="k">iteración n</div><div class="v" id="sNVal">0</div></div>
+            <div class="ro"><div class="k">θₙ</div><div class="v am" id="sThVal">—</div></div>
+            <div class="ro"><div class="k">factor 1−2η</div><div class="v cy" id="sFVal">—</div></div>
+          </div>
+          <div class="badge ok" id="stabBadge">convergencia monótona</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="controls">
+  <button class="nv" id="prev" aria-label="Anterior">‹</button>
+  <div class="dots" id="dots"></div>
+  <span class="counter" id="counter">01 / 06</span>
+  <button class="nv" id="next" aria-label="Siguiente">›</button>
+</div>
+
+<div class="overlay" id="ovOverlay">
+  <button class="icon ovclose" id="ovCloseX">✕</button>
+  <div class="ovhead">Recorrido de la clase</div>
+  <div class="ovgrid" id="ovgrid"></div>
+</div>
+<div class="overlay help" id="helpOverlay">
+  <button class="icon ovclose" id="helpCloseX">✕</button>
+  <div class="ovhead">Atajos de teclado</div>
+  <div class="pair"><dt>→ · espacio</dt><dd>siguiente diapositiva</dd></div>
+  <div class="pair"><dt>←</dt><dd>diapositiva anterior</dd></div>
+  <div class="pair"><dt>O</dt><dd>vista resumen de todo</dd></div>
+  <div class="pair"><dt>T</dt><dd>cambiar tema claro / oscuro</dd></div>
+  <div class="pair"><dt>F</dt><dd>pantalla completa</dd></div>
+  <div class="pair"><dt>1 … 6</dt><dd>ir directo a una diapositiva</dd></div>
+  <div class="pair"><dt>Esc</dt><dd>cerrar este panel</dd></div>
+</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>

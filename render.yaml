@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: edo-aprendizaje
+    runtime: static
+    staticPublishPath: ./public
+    pullRequestPreviewsEnabled: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
